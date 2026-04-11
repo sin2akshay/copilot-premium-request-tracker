@@ -152,7 +152,7 @@
     "build": "node esbuild.js",
     "watch": "node esbuild.js --watch",
     "check": "tsc --noEmit",
-    "vscode:prepublish": "npm run build",
+    "vscode:prepublish": "node esbuild.js --production",
     "package:vsix": "npm run check && npx @vscode/vsce package",
     "pretest": "npm run build && npm run check",
     "test": "vitest run"

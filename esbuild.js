@@ -3,6 +3,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 
 const watch = process.argv.includes('--watch');
+const production = process.argv.includes('--production');
 const root = __dirname;
 const outDir = path.join(root, 'out');
 
@@ -19,7 +20,8 @@ async function build() {
 
   const common = {
     bundle: true,
-    sourcemap: true,
+    sourcemap: !production,
+    minify: production,
     external: ['vscode'],
     logLevel: 'info'
   };

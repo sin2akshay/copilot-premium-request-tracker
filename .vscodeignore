@@ -1,6 +1,12 @@
 .gitignore
 .github/**
+.vscode/**
 node_modules/**
 src/**
+out/**/*.map
 vitest.config.ts
+tsconfig.json
+esbuild.js
 PRD-copilot-usage-status-bar.md
+SUPPORT.md
+*.vsix
