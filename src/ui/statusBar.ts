@@ -116,25 +116,19 @@ export class StatusBar implements vscode.Disposable {
 
     // ── Premium requests
     if (data.unlimited) {
-      md.appendMarkdown('$(star)&ensp;Premium Requests: **Unlimited**\n\n');
+      md.appendMarkdown('$(star)&ensp;Premium: **Unlimited**\n\n');
     } else if (data.noData) {
-      md.appendMarkdown('$(star)&ensp;Premium Requests: **—**\n\n');
+      md.appendMarkdown('$(star)&ensp;Premium: **—**\n\n');
     } else {
       const remaining = Math.max(0, data.quota - data.used);
-      const barWidth = 20;
-      const filled = Math.max(0, Math.round((data.usedPct / 100) * barWidth));
-      const empty = barWidth - filled;
-      const bar = '▮'.repeat(filled) + '▯'.repeat(empty);
-
-      md.appendMarkdown(`$(star)&ensp;**${data.used}** / ${data.quota} &nbsp;used&ensp;·&ensp;**${remaining}** remaining\n\n`);
-      md.appendMarkdown(`\`${bar}\` &nbsp;${data.usedPct}%\n\n`);
+      md.appendMarkdown(`$(star)&ensp;**${data.used}** / ${data.quota} used &nbsp;·&nbsp; **${remaining}** remaining\n\n`);
 
       if (data.overageEnabled && data.overageUsed > 0) {
-        md.appendMarkdown(`$(warning)&ensp;Overage: **${data.overageUsed}** requests beyond quota\n\n`);
+        md.appendMarkdown(`$(warning)&ensp;Overage: **${data.overageUsed}** extra requests\n\n`);
       }
     }
 
-    // ── Chat & completions (compact)
+    // ── Chat & completions
     const chatStr = data.chatQuota
       ? (data.chatQuota.unlimited ? 'Unlimited' : `${data.chatQuota.remaining} left`)
       : '—';
@@ -145,16 +139,19 @@ export class StatusBar implements vscode.Disposable {
 
     md.appendMarkdown('---\n\n');
 
-    // ── Reset date
+    // ── Pacing & reset
     if (!data.unlimited && !data.noData) {
       const now = new Date();
       const daysLeft = Math.max(0, Math.ceil((data.resetDate.getTime() - now.getTime()) / 86_400_000));
-      const resetStr = data.resetDate.toLocaleDateString(undefined, {
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric',
-      });
-      md.appendMarkdown(`$(calendar)&ensp;Resets **${resetStr}** &nbsp;(${daysLeft}d)\n\n`);
+      const remaining = Math.max(0, data.quota - data.used);
+      const resetStr = data.resetDate.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+
+      if (daysLeft > 0) {
+        const pace = Math.floor(remaining / daysLeft);
+        md.appendMarkdown(`$(dashboard)&ensp;**~${pace}** req/day to last until **${resetStr}** &nbsp;(${daysLeft}d left)\n\n`);
+      } else {
+        md.appendMarkdown(`$(calendar)&ensp;Resets **${resetStr}**\n\n`);
+      }
     }
 
     // ── Updated + actions
@@ -162,15 +159,15 @@ export class StatusBar implements vscode.Disposable {
       md.appendMarkdown(`$(clock)&ensp;${formatTimestamp(lastUpdatedAt)}`);
     }
     md.appendMarkdown(
-      ` &nbsp; [$(refresh)&ensp;Refresh](command:copilotUsageInsights.refresh)`
-      + ` &nbsp; [$(dashboard)&ensp;Dashboard](command:copilotUsageInsights.openDetails)`,
+      ` &nbsp; [$(refresh)](command:copilotUsageInsights.refresh "Refresh")`
+      + ` &nbsp; [$(open-preview)](command:copilotUsageInsights.openDetails "Open Dashboard")`,
     );
 
     if (isRateLimited) {
-      md.appendMarkdown('\n\n$(alert)&ensp;Rate limited · data may be outdated');
+      md.appendMarkdown('\n\n$(alert)&ensp;Rate limited · data may be stale');
     }
     if (isStale) {
-      md.appendMarkdown('\n\n$(alert)&ensp;Offline · data may be outdated');
+      md.appendMarkdown('\n\n$(alert)&ensp;Offline · data may be stale');
     }
 
     return md;

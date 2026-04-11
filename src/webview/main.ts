@@ -108,6 +108,12 @@ function render(model: DetailViewModelSerialized): void {
     ? new Date(data.assignedDate).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })
     : '—';
 
+  // Pacing calculation
+  const remaining = data.noData || data.unlimited ? null : Math.max(0, data.quota - data.used);
+  const pacingPerDay = (remaining !== null && daysLeft !== null && daysLeft > 0)
+    ? Math.floor(remaining / daysLeft)
+    : null;
+
   // Gauge values
   let gaugePercent = 0;
   let gaugeLabel = '—';
@@ -184,9 +190,9 @@ function render(model: DetailViewModelSerialized): void {
             <span class="stat-value mono">${data.noData ? '—' : data.unlimited ? '∞' : String(data.quota - data.used)}</span>
             <span class="stat-label">Remaining</span>
           </div>
-          <div class="stat-item">
-            <span class="stat-value mono">${esc(resetStr)}</span>
-            <span class="stat-label">Reset Date</span>
+          <div class="stat-item${pacingPerDay !== null && pacingPerDay <= 5 ? ' warn-bg' : ''}">
+            <span class="stat-value mono">${pacingPerDay !== null ? `~${pacingPerDay}` : '—'}</span>
+            <span class="stat-label">Requests / Day</span>
           </div>
           ${data.overageEnabled && data.overageUsed > 0 ? `
           <div class="stat-item warn-bg">
@@ -194,8 +200,8 @@ function render(model: DetailViewModelSerialized): void {
             <span class="stat-label">Overage Used</span>
           </div>` : `
           <div class="stat-item">
-            <span class="stat-value mono">${esc(updatedStr)}</span>
-            <span class="stat-label">Last Updated</span>
+            <span class="stat-value mono">${esc(resetStr)}</span>
+            <span class="stat-label">Reset Date</span>
           </div>`}
         </div>
       </section>
@@ -282,6 +288,7 @@ function render(model: DetailViewModelSerialized): void {
         <div class="footer-left">
           <span class="muted">Updated ${esc(updatedStr)}</span>
           <span class="dot">·</span>
+          ${pacingPerDay !== null ? `<span class="muted">~${pacingPerDay} req/day to stay on pace</span><span class="dot">·</span>` : ''}
           <a href="https://github.com/settings/billing/premium_requests_usage">View on GitHub</a>
         </div>
         <button class="btn btn-ghost btn-sm" data-action="disconnect">Disconnect</button>

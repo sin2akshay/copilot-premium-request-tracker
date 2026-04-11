@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.4.2
+
+- Fixed quota bar track visibility — bar now uses the input background + border so the unfilled portion is clearly visible on all themes.
+- Added **pacing indicator** — “Requests / Day” stat in the dashboard hero shows how many requests per day you can use to stay within quota until reset. Highlights in warning color when pace drops to 5 or fewer.
+- Redesigned tooltip — replaced the redundant progress bar with a pacing line (“~11 req/day to last until May 1”), showing days left and daily budget at a glance.
+- Replaced “Last Updated” hero stat with the more actionable pacing stat; updated time now shown in footer with pacing summary.
+
 ## 0.4.1
 
 - Fixed the usage gauge ring — arc now correctly fills proportional to usage instead of showing a full circle.
