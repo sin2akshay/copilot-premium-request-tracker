@@ -17,18 +17,14 @@ export const PLAN_LABELS: Record<string, string> = {
   enterprise: 'Enterprise',
 };
 
-/** Available status bar display modes. */
-export type StatusBarMode =
-  | 'count'
-  | 'percent'
-  | 'countPercent'
-  | 'remaining'
-  | 'segmented'
-  | 'blocks'
-  | 'thinBlocks'
-  | 'dots'
-  | 'circles'
-  | 'hybrid';
+/** Text portion of the status bar display. */
+export type StatusBarTextMode = 'none' | 'count' | 'percent' | 'countPercent' | 'remaining';
+
+/** Graphic/visual portion of the status bar display. */
+export type StatusBarGraphicMode = 'none' | 'segmented' | 'blocks' | 'thinBlocks' | 'dots' | 'circles';
+
+/** Whether the text label appears to the left or right of the graphic. */
+export type StatusBarTextPosition = 'left' | 'right';
 
 /** Snapshot of a single quota category from the API. */
 export interface QuotaSnapshot {
@@ -67,7 +63,9 @@ export interface ExtensionConfig {
   thresholdEnabled: boolean;
   thresholdWarning: number;
   thresholdCritical: number;
-  statusBarMode: StatusBarMode;
+  statusBarTextMode: StatusBarTextMode;
+  statusBarGraphicMode: StatusBarGraphicMode;
+  statusBarTextPosition: StatusBarTextPosition;
   segmentedBarWidth: number;
 }
 

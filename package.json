@@ -2,7 +2,7 @@
   "name": "copilot-premium-request-tracker",
   "displayName": "Copilot Usage Insights",
   "description": "See your GitHub Copilot premium request usage directly in the VS Code status bar.",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "publisher": "sin2akshay",
   "license": "MIT",
   "pricing": "Free",
@@ -90,41 +90,65 @@
           "maximum": 100,
           "markdownDescription": "Usage percentage at which the status bar turns critical/error color."
         },
-        "copilotUsageInsights.statusBarMode": {
+        "copilotUsageInsights.statusBarTextMode": {
           "type": "string",
           "enum": [
+            "none",
             "count",
             "percent",
             "countPercent",
-            "remaining",
+            "remaining"
+          ],
+          "enumDescriptions": [
+            "No text — show only the graphic visualization",
+            "150/300 — used / quota",
+            "50% — percentage used",
+            "150/300 (50%) — used, quota, and percentage",
+            "150 left — remaining requests"
+          ],
+          "default": "percent",
+          "markdownDescription": "Text portion of the status bar display. Set to `none` to show only the graphic."
+        },
+        "copilotUsageInsights.statusBarGraphicMode": {
+          "type": "string",
+          "enum": [
+            "none",
             "segmented",
             "blocks",
             "thinBlocks",
             "dots",
-            "circles",
-            "hybrid"
+            "circles"
           ],
           "enumDescriptions": [
-            "150/300 — used / quota",
-            "50% — percentage used",
-            "150/300 (50%) — used, quota, and percentage",
-            "150 left — remaining requests",
-            "[■■■■□□□□] 50% — square segments with percentage",
-            "████░░░░ 50% — block segments with percentage",
-            "▰▰▰▰▱▱▱▱ 50% — thin block segments with percentage",
-            "••••···· 50% — dot segments with percentage",
-            "●●●●○○○○ 50% — circle segments with percentage",
-            "150/300 [■■■■□□□□] — count and square segments"
+            "No graphic — show only text",
+            "[■■■■□□□□] — square segments",
+            "████░░░░ — filled block bar",
+            "▰▰▰▰▱▱▱▱ — thin block bar",
+            "••••···· — dot bar",
+            "●●●●○○○○ — circle bar"
           ],
-          "default": "percent",
-          "markdownDescription": "Controls how usage is displayed in the status bar."
+          "default": "none",
+          "markdownDescription": "Graphic/visual portion of the status bar display. Set to `none` to show only text."
+        },
+        "copilotUsageInsights.statusBarTextPosition": {
+          "type": "string",
+          "enum": [
+            "left",
+            "right"
+          ],
+          "enumDescriptions": [
+            "Text appears to the left of the graphic — e.g. 50% [■■■■□□□□]",
+            "Text appears to the right of the graphic — e.g. [■■■■□□□□] 50%"
+          ],
+          "default": "left",
+          "markdownDescription": "Controls whether the text label appears to the left or right of the graphic when both are enabled."
         },
         "copilotUsageInsights.segmentedBarWidth": {
           "type": "number",
           "default": 8,
           "minimum": 4,
           "maximum": 16,
-          "markdownDescription": "Number of segments in bar-style status bar modes (segmented, blocks, dots, circles, hybrid)."
+          "markdownDescription": "Number of segments in bar-style graphic modes (segmented, blocks, dots, circles)."
         }
       }
     },

@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.4.3
+
+- **Split status bar display into two independent settings** — `statusBarTextMode` and `statusBarGraphicMode` replace the single `statusBarMode` setting.
+- `statusBarTextMode` controls the text label: `none`, `count`, `percent`, `countPercent`, or `remaining`.
+- `statusBarGraphicMode` controls the visual bar: `none`, `segmented`, `blocks`, `thinBlocks`, `dots`, or `circles`.
+- New `statusBarTextPosition` setting (`left` / `right`) controls whether the text appears before or after the graphic.
+- Any combination is now possible — text only, graphic only, or both in either order (e.g. `50% [■■■■□□□□]` or `[■■■■□□□□] 50%`).
+- Dashboard settings panel updated with three separate controls for the new options.
+- Config validation prevents both text and graphic from being `none` simultaneously — falls back to `percent` text.
+
 ## 0.4.2
 
 - Fixed quota bar track visibility — bar now uses the input background + border so the unfilled portion is clearly visible on all themes.

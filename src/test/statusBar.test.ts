@@ -52,7 +52,9 @@ const baseConfig: ExtensionConfig = {
   thresholdEnabled: true,
   thresholdWarning: 75,
   thresholdCritical: 90,
-  statusBarMode: 'percent',
+  statusBarTextMode: 'percent',
+  statusBarGraphicMode: 'none',
+  statusBarTextPosition: 'left',
   segmentedBarWidth: 8,
 };
 
@@ -62,35 +64,51 @@ describe('renderStatusBarText', () => {
   });
 
   it('renders count mode', () => {
-    expect(renderStatusBarText(baseData, 50, { ...baseConfig, statusBarMode: 'count' })).toBe('150/300');
+    expect(renderStatusBarText(baseData, 50, { ...baseConfig, statusBarTextMode: 'count' })).toBe('150/300');
   });
 
   it('renders countPercent mode', () => {
-    expect(renderStatusBarText(baseData, 50, { ...baseConfig, statusBarMode: 'countPercent' })).toBe('150/300 (50%)');
+    expect(renderStatusBarText(baseData, 50, { ...baseConfig, statusBarTextMode: 'countPercent' })).toBe('150/300 (50%)');
   });
 
   it('renders remaining mode', () => {
-    expect(renderStatusBarText(baseData, 50, { ...baseConfig, statusBarMode: 'remaining' })).toBe('150 left');
+    expect(renderStatusBarText(baseData, 50, { ...baseConfig, statusBarTextMode: 'remaining' })).toBe('150 left');
   });
 
-  it('renders hybrid mode', () => {
-    expect(renderStatusBarText(baseData, 50, { ...baseConfig, statusBarMode: 'hybrid' })).toBe('150/300 [■■■■□□□□]');
+  it('renders text-only (no graphic)', () => {
+    expect(renderStatusBarText(baseData, 50, { ...baseConfig, statusBarTextMode: 'percent', statusBarGraphicMode: 'none' })).toBe('50%');
   });
 
-  it('renders segmented bar styles', () => {
-    expect(renderStatusBarText(baseData, 50, { ...baseConfig, statusBarMode: 'segmented' })).toBe('[■■■■□□□□] 50%');
-    expect(renderStatusBarText(baseData, 50, { ...baseConfig, statusBarMode: 'blocks' })).toBe('████░░░░ 50%');
-    expect(renderStatusBarText(baseData, 50, { ...baseConfig, statusBarMode: 'thinBlocks' })).toBe('▰▰▰▰▱▱▱▱ 50%');
-    expect(renderStatusBarText(baseData, 50, { ...baseConfig, statusBarMode: 'dots' })).toBe('••••···· 50%');
-    expect(renderStatusBarText(baseData, 50, { ...baseConfig, statusBarMode: 'circles' })).toBe('●●●●○○○○ 50%');
+  it('renders graphic-only (no text)', () => {
+    expect(renderStatusBarText(baseData, 50, { ...baseConfig, statusBarTextMode: 'none', statusBarGraphicMode: 'segmented' })).toBe('[■■■■□□□□]');
+  });
+
+  it('renders text left of graphic by default', () => {
+    expect(renderStatusBarText(baseData, 50, { ...baseConfig, statusBarTextMode: 'percent', statusBarGraphicMode: 'segmented', statusBarTextPosition: 'left' })).toBe('50% [■■■■□□□□]');
+  });
+
+  it('renders text right of graphic when position is right', () => {
+    expect(renderStatusBarText(baseData, 50, { ...baseConfig, statusBarTextMode: 'percent', statusBarGraphicMode: 'segmented', statusBarTextPosition: 'right' })).toBe('[■■■■□□□□] 50%');
+  });
+
+  it('renders all graphic styles', () => {
+    expect(renderStatusBarText(baseData, 50, { ...baseConfig, statusBarTextMode: 'none', statusBarGraphicMode: 'segmented' })).toBe('[■■■■□□□□]');
+    expect(renderStatusBarText(baseData, 50, { ...baseConfig, statusBarTextMode: 'none', statusBarGraphicMode: 'blocks' })).toBe('████░░░░');
+    expect(renderStatusBarText(baseData, 50, { ...baseConfig, statusBarTextMode: 'none', statusBarGraphicMode: 'thinBlocks' })).toBe('▰▰▰▰▱▱▱▱');
+    expect(renderStatusBarText(baseData, 50, { ...baseConfig, statusBarTextMode: 'none', statusBarGraphicMode: 'dots' })).toBe('••••····');
+    expect(renderStatusBarText(baseData, 50, { ...baseConfig, statusBarTextMode: 'none', statusBarGraphicMode: 'circles' })).toBe('●●●●○○○○');
   });
 
   it('respects segmentedBarWidth', () => {
-    expect(renderStatusBarText(baseData, 50, { ...baseConfig, statusBarMode: 'segmented', segmentedBarWidth: 4 })).toBe('[■■□□] 50%');
+    expect(renderStatusBarText(baseData, 50, { ...baseConfig, statusBarTextMode: 'none', statusBarGraphicMode: 'segmented', segmentedBarWidth: 4 })).toBe('[■■□□]');
   });
 
   it('renders low percentages with at least one filled segment', () => {
-    expect(renderStatusBarText(baseData, 1, { ...baseConfig, statusBarMode: 'segmented' })).toBe('[■□□□□□□□] 1%');
+    expect(renderStatusBarText(baseData, 1, { ...baseConfig, statusBarTextMode: 'none', statusBarGraphicMode: 'segmented' })).toBe('[■□□□□□□□]');
+  });
+
+  it('falls back to percent when both text and graphic are none', () => {
+    expect(renderStatusBarText(baseData, 50, { ...baseConfig, statusBarTextMode: 'none', statusBarGraphicMode: 'none' })).toBe('50%');
   });
 });
 

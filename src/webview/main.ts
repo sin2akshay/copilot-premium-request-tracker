@@ -38,7 +38,9 @@ interface ConfigSerialized {
   thresholdEnabled: boolean;
   thresholdWarning: number;
   thresholdCritical: number;
-  statusBarMode: string;
+  statusBarTextMode: string;
+  statusBarGraphicMode: string;
+  statusBarTextPosition: string;
   segmentedBarWidth: number;
 }
 
@@ -56,17 +58,21 @@ const root = document.getElementById('app');
 const GAUGE_RADIUS = 56;
 const GAUGE_CIRCUMFERENCE = 2 * Math.PI * GAUGE_RADIUS; // ~351.86
 
-const STATUS_BAR_MODES = [
-  { value: 'count', label: 'Count', desc: '150/300' },
-  { value: 'percent', label: 'Percentage', desc: '50%' },
-  { value: 'countPercent', label: 'Count + %', desc: '150/300 (50%)' },
-  { value: 'remaining', label: 'Remaining', desc: '150 left' },
-  { value: 'segmented', label: 'Segments', desc: '[■■□□] 50%' },
-  { value: 'blocks', label: 'Blocks', desc: '████░░ 50%' },
-  { value: 'thinBlocks', label: 'Thin Blocks', desc: '▰▰▱▱ 50%' },
-  { value: 'dots', label: 'Dots', desc: '••·· 50%' },
-  { value: 'circles', label: 'Circles', desc: '●●○○ 50%' },
-  { value: 'hybrid', label: 'Hybrid', desc: '150/300 [■■□□]' },
+const STATUS_BAR_TEXT_MODES = [
+  { value: 'none',         label: 'None',        desc: '—' },
+  { value: 'count',        label: 'Count',       desc: '150/300' },
+  { value: 'percent',      label: 'Percentage',  desc: '50%' },
+  { value: 'countPercent', label: 'Count + %',   desc: '150/300 (50%)' },
+  { value: 'remaining',    label: 'Remaining',   desc: '150 left' },
+];
+
+const STATUS_BAR_GRAPHIC_MODES = [
+  { value: 'none',       label: 'None',        desc: '—' },
+  { value: 'segmented',  label: 'Segments',    desc: '[■■□□]' },
+  { value: 'blocks',     label: 'Blocks',      desc: '████░░' },
+  { value: 'thinBlocks', label: 'Thin Blocks', desc: '▰▰▱▱' },
+  { value: 'dots',       label: 'Dots',        desc: '••··' },
+  { value: 'circles',    label: 'Circles',     desc: '●●○○' },
 ];
 
 window.addEventListener('message', event => {
@@ -142,8 +148,12 @@ function render(model: DetailViewModelSerialized): void {
     : GAUGE_CIRCUMFERENCE * Math.min(gaugePercent, 100) / 100;
   const gaugeGap = GAUGE_CIRCUMFERENCE - gaugeArc;
 
-  const modeOptions = STATUS_BAR_MODES.map(m =>
-    `<option value="${m.value}" ${m.value === config.statusBarMode ? 'selected' : ''}>${esc(m.label)} — ${esc(m.desc)}</option>`,
+  const textModeOptions = STATUS_BAR_TEXT_MODES.map(m =>
+    `<option value="${m.value}" ${m.value === config.statusBarTextMode ? 'selected' : ''}>${esc(m.label)} — ${esc(m.desc)}</option>`,
+  ).join('');
+
+  const graphicModeOptions = STATUS_BAR_GRAPHIC_MODES.map(m =>
+    `<option value="${m.value}" ${m.value === config.statusBarGraphicMode ? 'selected' : ''}>${esc(m.label)} — ${esc(m.desc)}</option>`,
   ).join('');
 
   root.innerHTML = `
@@ -238,9 +248,22 @@ function render(model: DetailViewModelSerialized): void {
         <h2 class="card-title">Status Bar Settings</h2>
         <div class="settings-grid">
           <div class="setting-row">
-            <label for="setting-mode">Display Mode</label>
-            <select id="setting-mode" data-setting="statusBarMode">
-              ${modeOptions}
+            <label for="setting-text-mode">Text Display</label>
+            <select id="setting-text-mode" data-setting="statusBarTextMode">
+              ${textModeOptions}
+            </select>
+          </div>
+          <div class="setting-row">
+            <label for="setting-graphic-mode">Graphic Display</label>
+            <select id="setting-graphic-mode" data-setting="statusBarGraphicMode">
+              ${graphicModeOptions}
+            </select>
+          </div>
+          <div class="setting-row">
+            <label for="setting-text-pos">Text Position</label>
+            <select id="setting-text-pos" data-setting="statusBarTextPosition">
+              <option value="left" ${config.statusBarTextPosition === 'left' ? 'selected' : ''}>Left — text before graphic</option>
+              <option value="right" ${config.statusBarTextPosition === 'right' ? 'selected' : ''}>Right — text after graphic</option>
             </select>
           </div>
           <div class="setting-row">

@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 
-import type { ExtensionConfig, StatusBarMode, UsageData } from '../core/models';
+import type { ExtensionConfig, UsageData } from '../core/models';
 
 export class StatusBar implements vscode.Disposable {
   private readonly item: vscode.StatusBarItem;
@@ -45,7 +45,7 @@ export class StatusBar implements vscode.Disposable {
 
   showOffline(lastData: UsageData | null): void {
     if (lastData) {
-      this.showData(lastData, { refreshIntervalMinutes: 5, thresholdEnabled: false, thresholdWarning: 75, thresholdCritical: 90, statusBarMode: 'percent', segmentedBarWidth: 8 }, null, true);
+      this.showData(lastData, { refreshIntervalMinutes: 5, thresholdEnabled: false, thresholdWarning: 75, thresholdCritical: 90, statusBarTextMode: 'percent', statusBarGraphicMode: 'none', statusBarTextPosition: 'left', segmentedBarWidth: 8 }, null, true);
     } else {
       this.item.text = '$(alert)';
       this.item.tooltip = 'Copilot Usage: Offline';
@@ -182,34 +182,39 @@ export function computeDisplayPct(data: UsageData): number {
 }
 
 export function renderStatusBarText(data: UsageData, pct: number, config: ExtensionConfig): string {
-  const mode: StatusBarMode = config.statusBarMode;
   const w = config.segmentedBarWidth;
   const remaining = Math.max(0, data.quota - data.used);
 
-  switch (mode) {
-    case 'count':
-      return `${data.used}/${data.quota}`;
-    case 'percent':
-      return `${pct}%`;
-    case 'countPercent':
-      return `${data.used}/${data.quota} (${pct}%)`;
-    case 'remaining':
-      return `${remaining} left`;
-    case 'segmented':
-      return `${progressMeter(pct, w, { filled: '■', empty: '□', prefix: '[', suffix: ']' })} ${pct}%`;
-    case 'blocks':
-      return `${progressMeter(pct, w, { filled: '█', empty: '░' })} ${pct}%`;
-    case 'thinBlocks':
-      return `${progressMeter(pct, w, { filled: '▰', empty: '▱' })} ${pct}%`;
-    case 'dots':
-      return `${progressMeter(pct, w, { filled: '•', empty: '·' })} ${pct}%`;
-    case 'circles':
-      return `${progressMeter(pct, w, { filled: '●', empty: '○' })} ${pct}%`;
-    case 'hybrid':
-      return `${data.used}/${data.quota} ${progressMeter(pct, w, { filled: '■', empty: '□', prefix: '[', suffix: ']' })}`;
-    default:
-      return `${pct}%`;
+  // Text part
+  let textPart = '';
+  switch (config.statusBarTextMode) {
+    case 'count':        textPart = `${data.used}/${data.quota}`; break;
+    case 'percent':      textPart = `${pct}%`; break;
+    case 'countPercent': textPart = `${data.used}/${data.quota} (${pct}%)`; break;
+    case 'remaining':    textPart = `${remaining} left`; break;
+    case 'none': default: textPart = ''; break;
   }
+
+  // Graphic part
+  let graphicPart = '';
+  switch (config.statusBarGraphicMode) {
+    case 'segmented':  graphicPart = progressMeter(pct, w, { filled: '■', empty: '□', prefix: '[', suffix: ']' }); break;
+    case 'blocks':     graphicPart = progressMeter(pct, w, { filled: '█', empty: '░' }); break;
+    case 'thinBlocks': graphicPart = progressMeter(pct, w, { filled: '▰', empty: '▱' }); break;
+    case 'dots':       graphicPart = progressMeter(pct, w, { filled: '•', empty: '·' }); break;
+    case 'circles':    graphicPart = progressMeter(pct, w, { filled: '●', empty: '○' }); break;
+    case 'none': default: graphicPart = ''; break;
+  }
+
+  // Both none — safety fallback (should be prevented by config validation)
+  if (!textPart && !graphicPart) { return `${pct}%`; }
+
+  if (!textPart) { return graphicPart; }
+  if (!graphicPart) { return textPart; }
+
+  return config.statusBarTextPosition === 'right'
+    ? `${graphicPart} ${textPart}`
+    : `${textPart} ${graphicPart}`;
 }
 
 function progressMeter(
