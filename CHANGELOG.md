@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.4.4
+
+- **Text Position is now a toggle button** — replaced the dropdown for `statusBarTextPosition` with a compact **← Left / Right →** two-button toggle in the dashboard settings panel.
+- Fixed bug where dashboard setting changes (Text Mode, Graphic Mode, Text Position) were silently dropped — `updateSetting` allowlist in `extension.ts` was still referencing the removed `statusBarMode` key instead of the three new keys.
+
 ## 0.4.3
 
 - **Split status bar display into two independent settings** — `statusBarTextMode` and `statusBarGraphicMode` replace the single `statusBarMode` setting.

@@ -260,11 +260,15 @@ function render(model: DetailViewModelSerialized): void {
             </select>
           </div>
           <div class="setting-row">
-            <label for="setting-text-pos">Text Position</label>
-            <select id="setting-text-pos" data-setting="statusBarTextPosition">
-              <option value="left" ${config.statusBarTextPosition === 'left' ? 'selected' : ''}>Left — text before graphic</option>
-              <option value="right" ${config.statusBarTextPosition === 'right' ? 'selected' : ''}>Right — text after graphic</option>
-            </select>
+            <label>Text Position</label>
+            <div class="btn-group" data-setting="statusBarTextPosition">
+              <button type="button" class="btn-group-opt ${config.statusBarTextPosition === 'left' ? 'active' : ''}" data-value="left">
+                ← Left
+              </button>
+              <button type="button" class="btn-group-opt ${config.statusBarTextPosition === 'right' ? 'active' : ''}" data-value="right">
+                Right →
+              </button>
+            </div>
           </div>
           <div class="setting-row">
             <label for="setting-refresh">Refresh Interval</label>
@@ -412,6 +416,15 @@ function bindSettings(): void {
   root.querySelectorAll<HTMLInputElement>('input[type="checkbox"][data-setting]').forEach(el => {
     el.addEventListener('change', () => {
       vscode.postMessage({ type: 'updateSetting', key: el.dataset.setting, value: el.checked });
+    });
+  });
+  root.querySelectorAll<HTMLElement>('.btn-group[data-setting]').forEach(group => {
+    group.querySelectorAll<HTMLButtonElement>('.btn-group-opt').forEach(btn => {
+      btn.addEventListener('click', () => {
+        group.querySelectorAll('.btn-group-opt').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        vscode.postMessage({ type: 'updateSetting', key: group.dataset.setting, value: btn.dataset.value });
+      });
     });
   });
 }

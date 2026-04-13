@@ -41,7 +41,9 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
         'threshold.enabled',
         'threshold.warning',
         'threshold.critical',
-        'statusBarMode',
+        'statusBarTextMode',
+        'statusBarGraphicMode',
+        'statusBarTextPosition',
         'segmentedBarWidth',
       ];
       if (!allowedKeys.includes(key)) { return; }

@@ -313,6 +313,23 @@ input[type="number"]:focus {
 .suffix { font-size: 0.78em; color: var(--muted); }
 .settings-divider { height: 1px; background: var(--border); margin: 2px 0; }
 
+/* Button group toggle (e.g. Left / Right) */
+.btn-group { display: inline-flex; border-radius: 6px; overflow: hidden; border: 1px solid var(--border); }
+.btn-group-opt {
+  flex: 1;
+  padding: 3px 10px;
+  font-size: 0.8em;
+  background: transparent;
+  color: var(--muted);
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s, color 0.15s;
+}
+.btn-group-opt:not(:last-child) { border-right: 1px solid var(--border); }
+.btn-group-opt:hover { background: color-mix(in srgb, var(--fg) 8%, transparent); color: var(--fg); }
+.btn-group-opt.active { background: var(--accent); color: var(--accent-fg); }
+
 /* Toggle switch */
 .toggle { position: relative; display: inline-flex; cursor: pointer; }
 .toggle input { position: absolute; opacity: 0; width: 0; height: 0; }
