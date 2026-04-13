@@ -12,7 +12,7 @@ export function getConfig(): ExtensionConfig {
   const critical = Number.isFinite(Number(rawCritical)) ? Number(rawCritical) : 90;
 
   const validTextModes = ['none', 'count', 'percent', 'countPercent', 'remaining'];
-  const validGraphicModes = ['none', 'segmented', 'blocks', 'thinBlocks', 'dots', 'circles'];
+  const validGraphicModes = ['none', 'segmented', 'blocks', 'thinBlocks', 'dots', 'circles', 'braille', 'rectangles'];
   const validTextPositions = ['left', 'right'];
 
   const rawTextMode = cfg.get<string>('statusBarTextMode', 'percent');

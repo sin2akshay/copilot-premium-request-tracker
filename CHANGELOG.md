@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.4.5
+
+- Added two new graphic display modes for the status bar:
+  - **Braille** (`⣿⣿⣿⣿⣀⣀⣀⣀`) — high-density braille dot bar.
+  - **Rectangles** (`▮▮▮▮▯▯▯▯`) — filled/outline rectangle bar.
+
 ## 0.4.4
 
 - **Text Position is now a toggle button** — replaced the dropdown for `statusBarTextPosition` with a compact **← Left / Right →** two-button toggle in the dashboard settings panel.

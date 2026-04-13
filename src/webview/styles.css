@@ -165,6 +165,11 @@ body {
   text-transform: uppercase;
   letter-spacing: 0.06em;
 }
+.stat-sub {
+  font-size: 0.72em;
+  color: var(--muted);
+  margin-top: 1px;
+}
 .mono { font-family: var(--font-mono); }
 
 /* ── Quota cards ── */

@@ -73,6 +73,8 @@ const STATUS_BAR_GRAPHIC_MODES = [
   { value: 'thinBlocks', label: 'Thin Blocks', desc: '▰▰▱▱' },
   { value: 'dots',       label: 'Dots',        desc: '••··' },
   { value: 'circles',    label: 'Circles',     desc: '●●○○' },
+  { value: 'braille',    label: 'Braille',     desc: '⣿⣿⣀⣀' },
+  { value: 'rectangles', label: 'Rectangles',  desc: '▮▮▯▯' },
 ];
 
 window.addEventListener('message', event => {
@@ -201,8 +203,8 @@ function render(model: DetailViewModelSerialized): void {
             <span class="stat-label">Remaining</span>
           </div>
           <div class="stat-item${pacingPerDay !== null && pacingPerDay <= 5 ? ' warn-bg' : ''}">
-            <span class="stat-value mono">${pacingPerDay !== null ? `~${pacingPerDay}` : '—'}</span>
-            <span class="stat-label">Requests / Day</span>
+            <span class="stat-value mono">${pacingPerDay !== null ? `~${pacingPerDay}/day` : '—'}</span>
+            <span class="stat-label">Daily Budget</span>
           </div>
           ${data.overageEnabled && data.overageUsed > 0 ? `
           <div class="stat-item warn-bg">

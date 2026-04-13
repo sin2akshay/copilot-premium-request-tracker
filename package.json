@@ -2,7 +2,7 @@
   "name": "copilot-premium-request-tracker",
   "displayName": "Copilot Usage Insights",
   "description": "See your GitHub Copilot premium request usage directly in the VS Code status bar.",
-  "version": "0.4.4",
+  "version": "0.4.5",
   "publisher": "sin2akshay",
   "license": "MIT",
   "pricing": "Free",
@@ -117,7 +117,9 @@
             "blocks",
             "thinBlocks",
             "dots",
-            "circles"
+            "circles",
+            "braille",
+            "rectangles"
           ],
           "enumDescriptions": [
             "No graphic — show only text",
@@ -125,7 +127,9 @@
             "████░░░░ — filled block bar",
             "▰▰▰▰▱▱▱▱ — thin block bar",
             "••••···· — dot bar",
-            "●●●●○○○○ — circle bar"
+            "●●●●○○○○ — circle bar",
+            "⣿⣿⣿⣿⣀⣀⣀⣀ — braille bar",
+            "▮▮▮▮▯▯▯▯ — rectangle bar"
           ],
           "default": "none",
           "markdownDescription": "Graphic/visual portion of the status bar display. Set to `none` to show only text."

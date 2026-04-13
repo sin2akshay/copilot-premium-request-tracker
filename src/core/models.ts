@@ -21,7 +21,7 @@ export const PLAN_LABELS: Record<string, string> = {
 export type StatusBarTextMode = 'none' | 'count' | 'percent' | 'countPercent' | 'remaining';
 
 /** Graphic/visual portion of the status bar display. */
-export type StatusBarGraphicMode = 'none' | 'segmented' | 'blocks' | 'thinBlocks' | 'dots' | 'circles';
+export type StatusBarGraphicMode = 'none' | 'segmented' | 'blocks' | 'thinBlocks' | 'dots' | 'circles' | 'braille' | 'rectangles';
 
 /** Whether the text label appears to the left or right of the graphic. */
 export type StatusBarTextPosition = 'left' | 'right';

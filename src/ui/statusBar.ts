@@ -198,11 +198,13 @@ export function renderStatusBarText(data: UsageData, pct: number, config: Extens
   // Graphic part
   let graphicPart = '';
   switch (config.statusBarGraphicMode) {
-    case 'segmented':  graphicPart = progressMeter(pct, w, { filled: '■', empty: '□', prefix: '[', suffix: ']' }); break;
-    case 'blocks':     graphicPart = progressMeter(pct, w, { filled: '█', empty: '░' }); break;
-    case 'thinBlocks': graphicPart = progressMeter(pct, w, { filled: '▰', empty: '▱' }); break;
-    case 'dots':       graphicPart = progressMeter(pct, w, { filled: '•', empty: '·' }); break;
-    case 'circles':    graphicPart = progressMeter(pct, w, { filled: '●', empty: '○' }); break;
+    case 'segmented':   graphicPart = progressMeter(pct, w, { filled: '■', empty: '□', prefix: '[', suffix: ']' }); break;
+    case 'blocks':      graphicPart = progressMeter(pct, w, { filled: '█', empty: '░' }); break;
+    case 'thinBlocks':  graphicPart = progressMeter(pct, w, { filled: '▰', empty: '▱' }); break;
+    case 'dots':        graphicPart = progressMeter(pct, w, { filled: '•', empty: '·' }); break;
+    case 'circles':     graphicPart = progressMeter(pct, w, { filled: '●', empty: '○' }); break;
+    case 'braille':     graphicPart = progressMeter(pct, w, { filled: '⣿', empty: '⣀' }); break;
+    case 'rectangles':  graphicPart = progressMeter(pct, w, { filled: '▮', empty: '▯' }); break;
     case 'none': default: graphicPart = ''; break;
   }
 

@@ -1,6 +1,12 @@
 # Copilot Usage Insights
 
-A VS Code extension that shows your GitHub Copilot premium request usage directly in the status bar.
+A VS Code extension that shows your GitHub Copilot premium request usage directly in the status bar — with a rich dashboard for deeper insight.
+
+**Status bar widget and hover tooltip:**
+
+![Status bar preview](assets/statusbar-preview.png)
+
+**Full dashboard:**
 
 ![Dashboard preview](assets/dashboard-preview.png)
 
@@ -13,9 +19,11 @@ On sign-in the extension calls the GitHub Copilot internal API (`copilot_interna
 - **Overage tracking** — if you're on a plan with paid overage, the status bar will exceed 100%.
 - **Offline recovery** — if the network is unavailable the last known values are shown; the extension retries automatically every 10 seconds.
 
-## Dashboard
+## Status Bar & Dashboard
 
-Click the status bar item or run **Copilot Usage Insights: Open Details** to open the dashboard. It includes:
+The status bar item sits right next to the GitHub Copilot icon and updates on every refresh. Hover over it for a quick summary popup showing usage, pacing, Chat/Completions quotas, and action links.
+
+Click the item or run **Copilot Usage Insights: Open Details** to open the full dashboard. It includes:
 
 - **Usage gauge** — animated SVG ring showing premium request consumption with color thresholds (green / warning / critical).
 - **Key stats** — days until reset, remaining requests, pacing (requests/day to stay within quota), and reset date at a glance.
@@ -121,11 +129,4 @@ npm run package:vsix
 
 Produces a `.vsix` in the repository root. Install via **Extensions: Install from VSIX…**.
 
-## Publish
 
-```bash
-npx @vscode/vsce login sin2akshay
-npx @vscode/vsce publish
-# or for pre-release:
-npx @vscode/vsce publish --pre-release
-```
