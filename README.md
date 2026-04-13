@@ -2,6 +2,8 @@
 
 A VS Code extension that shows your GitHub Copilot premium request usage directly in the status bar.
 
+![Dashboard preview](assets/dashboard-preview.png)
+
 ## How It Works
 
 On sign-in the extension calls the GitHub Copilot internal API (`copilot_internal/user`) — the same endpoint used by other community Copilot usage tools — to read your actual premium request quota and consumption. No local estimation, no org-level data, no guessing.
@@ -15,30 +17,61 @@ On sign-in the extension calls the GitHub Copilot internal API (`copilot_interna
 
 Click the status bar item or run **Copilot Usage Insights: Open Details** to open the dashboard. It includes:
 
-- **Usage gauge** — animated SVG ring showing premium request consumption with color thresholds.
-- **Key stats** — days until reset, remaining requests, reset date, and overage at a glance.
-- **Quota breakdown** — Chat, Completions, and Premium Interactions cards with usage bars.
+- **Usage gauge** — animated SVG ring showing premium request consumption with color thresholds (green / warning / critical).
+- **Key stats** — days until reset, remaining requests, pacing (requests/day to stay within quota), and reset date at a glance.
+- **Quota breakdown** — Chat, Completions, and Premium Interactions cards with live usage bars and remaining counts.
 - **Account info** — plan type, Chat/MCP enabled status, and membership date.
-- **Inline settings** — change status bar mode, refresh interval, bar width, and color thresholds without leaving the dashboard.
+- **Inline settings** — configure all status bar display options, refresh interval, bar width, and color thresholds without leaving the dashboard.
+- **Pacing indicator** — shows how many requests per day you can use to stay within your monthly quota; highlights in warning color when pace is low.
 
 The dashboard uses VS Code CSS variables throughout, so it automatically adapts to any light, dark, or high-contrast theme.
 
-## Status Bar Modes
+## Status Bar Display
 
-Configure `copilotUsageInsights.statusBarMode` to choose how usage is shown:
+The status bar item is positioned immediately to the left of the GitHub Copilot icon. Two independent settings control what is shown:
 
-| Mode | Example |
+### Text (`statusBarTextMode`)
+
+| Value | Example |
 |---|---|
 | `percent` *(default)* | `50%` |
 | `count` | `150/300` |
 | `countPercent` | `150/300 (50%)` |
 | `remaining` | `150 left` |
-| `segmented` | `[■■■■□□□□] 50%` |
-| `blocks` | `████░░░░ 50%` |
-| `thinBlocks` | `▰▰▰▰▱▱▱▱ 50%` |
-| `dots` | `••••···· 50%` |
-| `circles` | `●●●●○○○○ 50%` |
-| `hybrid` | `150/300 [■■■■□□□□]` |
+| `none` | *(no text — graphic only)* |
+
+### Graphic (`statusBarGraphicMode`)
+
+| Value | Example |
+|---|---|
+| `none` *(default)* | *(no graphic — text only)* |
+| `segmented` | `[■■■■□□□□]` |
+| `blocks` | `████░░░░` |
+| `thinBlocks` | `▰▰▰▰▱▱▱▱` |
+| `dots` | `••••····` |
+| `circles` | `●●●●○○○○` |
+
+You can combine any text mode with any graphic mode. The **Text Position** toggle (`left` / `right`) controls which side of the graphic the text appears on.
+
+**Examples:**
+
+| Text | Graphic | Position | Result |
+|---|---|---|---|
+| `percent` | `blocks` | `left` | `50% ████░░░░` |
+| `percent` | `blocks` | `right` | `████░░░░ 50%` |
+| `countPercent` | `segmented` | `left` | `150/300 (50%) [■■■■□□□□]` |
+| `remaining` | `none` | — | `150 left` |
+| `none` | `circles` | — | `●●●●○○○○` |
+
+> Both `statusBarTextMode` and `statusBarGraphicMode` cannot be `none` simultaneously — the extension falls back to `percent` text.
+
+## Hover Tooltip
+
+Hovering over the status bar item shows a rich popup with:
+- Plan name and usage (`used / quota`, remaining)
+- Chat and Completions quota status
+- **Pacing line** — daily budget to last until reset (e.g. `~12 req/day to last until May 1`)
+- Last updated timestamp with Refresh and Open Dashboard action links
 
 ## Commands
 
@@ -46,7 +79,7 @@ Configure `copilotUsageInsights.statusBarMode` to choose how usage is shown:
 |---|---|
 | `Copilot Usage Insights: Sign In` | Sign in with GitHub |
 | `Copilot Usage Insights: Refresh` | Refresh usage data now |
-| `Copilot Usage Insights: Open Details` | Open the detail panel |
+| `Copilot Usage Insights: Open Details` | Open the dashboard |
 | `Copilot Usage Insights: Disconnect Account` | Disconnect and clear the session |
 | `Copilot Usage Insights: Open Settings` | Open extension settings |
 
@@ -58,8 +91,12 @@ Configure `copilotUsageInsights.statusBarMode` to choose how usage is shown:
 | `threshold.enabled` | `true` | Enable color-coded threshold warnings |
 | `threshold.warning` | `75` | Warning color threshold (%) |
 | `threshold.critical` | `90` | Critical/error color threshold (%) |
-| `statusBarMode` | `percent` | Status bar display style |
-| `segmentedBarWidth` | `8` | Number of segments in bar styles (4–16) |
+| `statusBarTextMode` | `percent` | Text portion of the status bar: `none`, `count`, `percent`, `countPercent`, `remaining` |
+| `statusBarGraphicMode` | `none` | Graphic portion of the status bar: `none`, `segmented`, `blocks`, `thinBlocks`, `dots`, `circles` |
+| `statusBarTextPosition` | `left` | Whether text appears `left` or `right` of the graphic |
+| `segmentedBarWidth` | `8` | Number of segments in bar-style graphic modes (4–16) |
+
+All settings except `threshold.*` can also be changed directly from the dashboard without opening VS Code settings.
 
 ## Privacy
 
