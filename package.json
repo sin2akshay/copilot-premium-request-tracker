@@ -10,7 +10,8 @@
     "vscode": "^1.100.0"
   },
   "categories": [
-    "Other"
+    "Other",
+    "Visualization"
   ],
   "preview": true,
   "icon": "assets/icon.png",
@@ -31,7 +32,10 @@
     "usage",
     "status-bar",
     "github",
-    "ai"
+    "ai",
+    "premium-requests",
+    "quota",
+    "dashboard"
   ],
   "activationEvents": [
     "onStartupFinished"

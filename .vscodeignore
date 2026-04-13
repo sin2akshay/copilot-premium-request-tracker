@@ -9,4 +9,6 @@ tsconfig.json
 esbuild.js
 PRD-copilot-usage-status-bar.md
 SUPPORT.md
+assets/dashboard-preview.png
+assets/statusbar-preview.png
 *.vsix

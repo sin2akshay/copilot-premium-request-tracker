@@ -52,17 +52,17 @@ All notable changes to this project will be documented in this file.
 
 ## 0.3.0
 
-- **Full rewrite** � replaced all local tracking, heuristic estimation, chat participant, and org-level metrics with a single direct call to the `copilot_internal/user` GitHub API endpoint.
-- Plan (Free, Pro, Pro+, Business, Enterprise) is now read directly from the API response � no longer misdetected from org membership.
+- **Full rewrite** — replaced all local tracking, heuristic estimation, chat participant, and org-level metrics with a single direct call to the `copilot_internal/user` GitHub API endpoint.
+- Plan (Free, Pro, Pro+, Business, Enterprise) is now read directly from the API response — no longer misdetected from org membership.
 - Exact `used / quota` numbers come from GitHub; no local estimation or allowance guessing.
-- Added overage support � when paid overage is in use the status bar exceeds 100% and the tooltip shows the overage count.
-- Added offline recovery mode � last known values are shown when the network is unavailable and the extension retries automatically every 10 seconds.
+- Added overage support — when paid overage is in use the status bar exceeds 100% and the tooltip shows the overage count.
+- Added offline recovery mode — last known values are shown when the network is unavailable and the extension retries automatically every 10 seconds.
 - Added configurable status bar display modes: `percent`, `count`, `countPercent`, `remaining`, `segmented`, `blocks`, `thinBlocks`, `dots`, `circles`, `hybrid`.
-- Added configurable `segmentedBarWidth` (4�16 segments, default 8).
+- Added configurable `segmentedBarWidth` (4–16 segments, default 8).
 - Simplified command set to: Sign In, Refresh, Open Details, Disconnect, Open Settings.
 - Simplified settings to: `refreshIntervalMinutes`, `threshold.enabled`, `threshold.warning`, `threshold.critical`, `statusBarMode`, `segmentedBarWidth`.
 - Removed chat participant, exact tracker, heuristic tracker, aggregator, and all storage for local events.
-- Disconnect now works correctly � uses a globalState flag so VS Code's built-in GitHub session is not re-used silently after disconnecting.
+- Disconnect now works correctly — uses a globalState flag so VS Code's built-in GitHub session is not re-used silently after disconnecting.
 
 ## 0.2.0
 

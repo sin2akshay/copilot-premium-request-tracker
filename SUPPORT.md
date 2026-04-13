@@ -13,10 +13,10 @@ Include:
 - VS Code version
 - Extension version
 - Operating system
-- Whether the problem affects tracked prompts, heuristic tracking, or official organization refresh
+- Whether the problem affects the status bar display, dashboard, or API data fetching
 - Relevant logs from the `Copilot Usage Insights` output channel
 
 ## Scope Notes
 
-- Official GitHub Copilot organization usage is best effort because GitHub reporting endpoints and payloads can change.
+- The extension calls the GitHub Copilot internal API (`copilot_internal/user`) to read your premium request quota and consumption.
 - The extension does not scrape private Copilot telemetry and does not store prompt or response contents.
