@@ -14,6 +14,8 @@ A VS Code extension that shows your GitHub Copilot premium request usage directl
 
 On sign-in the extension calls the GitHub Copilot internal API (`copilot_internal/user`) — the same endpoint used by other community Copilot usage tools — to read your actual premium request quota and consumption. No local estimation, no org-level data, no guessing.
 
+On startup the extension only attempts a silent session lookup. If no GitHub session is already available, it stays idle and waits for you to click **Sign In** or open a feature that explicitly requests access.
+
 - **Plan detection** — your plan (Free, Pro, Pro+, Business, Enterprise) is read from the API response, not inferred from org membership.
 - **Quota & usage** — exact `used / quota` numbers from GitHub, refreshed on a configurable interval.
 - **Overage tracking** — if you're on a plan with paid overage, the status bar will exceed 100%.
@@ -108,7 +110,11 @@ All settings except `threshold.*` can also be changed directly from the dashboar
 
 ## Privacy
 
-The extension stores only your GitHub login name in VS Code's global state. No prompt text, response text, or editor contents are ever read or stored. All usage data is fetched from GitHub — nothing is inferred locally.
+The extension stores your GitHub login name plus two local preference flags in VS Code global state: whether you explicitly disconnected the extension, and whether the optional billing scope has already been granted or declined.
+
+GitHub access tokens are managed by VS Code's built-in authentication provider and are not stored by this extension. No prompt text, response text, or editor contents are ever read or stored. All usage data is fetched from GitHub — nothing is inferred locally.
+
+If you enable billing details, the extension requests the additional GitHub `user` scope so it can call the billing usage endpoint.
 
 ## Development
 

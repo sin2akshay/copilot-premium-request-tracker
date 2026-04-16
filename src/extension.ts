@@ -87,8 +87,8 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
     }),
   );
 
-  // First refresh — prompt for sign-in if no session exists
-  await refresh(true);
+  // First refresh — resolve any existing session silently without prompting on startup
+  await refresh();
   resetTimer();
 }
 

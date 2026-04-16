@@ -2,12 +2,12 @@
 .github/**
 .vscode/**
 node_modules/**
+.dev/**
 src/**
 out/**/*.map
 vitest.config.ts
 tsconfig.json
 esbuild.js
-PRD-copilot-usage-status-bar.md
 SUPPORT.md
 assets/dashboard-preview.png
 assets/statusbar-preview.png
