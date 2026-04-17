@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.5.0
+
+- Refreshed the README status bar preview asset so it matches the current hover content and codicon-based layout.
+- Improved the preview generator alignment:
+  - tooltip stays inside the frame
+  - tooltip pointer aligns from the middle of the usage status item
+  - exported screenshot now matches the current preview composition
+
 ## 1.4.0
 
 - Redesigned the status bar hover tooltip using a cleaner Layout-5-style monospace summary block instead of the previous Markdown table.
