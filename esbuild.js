@@ -9,10 +9,21 @@ const outDir = path.join(root, 'out');
 
 async function ensureStaticAssets() {
   fs.mkdirSync(path.join(outDir, 'webview'), { recursive: true });
-  fs.copyFileSync(
-    path.join(root, 'src', 'webview', 'styles.css'),
-    path.join(outDir, 'webview', 'styles.css')
-  );
+  const stylesIn = path.join(root, 'src', 'webview', 'styles.css');
+  const stylesOut = path.join(outDir, 'webview', 'styles.css');
+
+  if (!production) {
+    fs.copyFileSync(stylesIn, stylesOut);
+    return;
+  }
+
+  const source = fs.readFileSync(stylesIn, 'utf8');
+  const result = await esbuild.transform(source, {
+    loader: 'css',
+    minify: true,
+    legalComments: 'none'
+  });
+  fs.writeFileSync(stylesOut, result.code);
 }
 
 async function build() {
