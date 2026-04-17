@@ -1,9 +1,12 @@
 # Copilot Usage Insights
 
-[![Latest release](https://img.shields.io/github/v/release/sin2akshay/copilot-usage-insights?label=release)](https://github.com/sin2akshay/copilot-usage-insights/releases)
-[![License](https://img.shields.io/github/license/sin2akshay/copilot-usage-insights)](LICENSE)
-[![VS Code](https://img.shields.io/badge/VS%20Code-%5E1.100.0-007acc)](https://code.visualstudio.com/)
+[![Latest release](https://img.shields.io/github/v/release/sin2akshay/copilot-usage-insights?label=release)](https://github.com/sin2akshay/copilot-usage-insights/releases) [![License](https://img.shields.io/github/license/sin2akshay/copilot-usage-insights)](LICENSE) [![VS Code](https://img.shields.io/badge/VS%20Code-%5E1.100.0-007acc)](https://code.visualstudio.com/)
+
+> VS Code Marketplace availability is in progress. Until then, install the extension from the GitHub Releases `.vsix` package.
+
 See your GitHub Copilot premium request usage without leaving VS Code.
+
+GitHub Copilot usage is built around [premium requests](https://docs.github.com/en/copilot/concepts/billing/copilot-requests), not a simple token balance shown in the editor. GitHub gives each plan a monthly premium request allowance, and premium models or features can deduct from that allowance using model-specific multipliers. This extension makes that request-based system easier to see and manage inside VS Code. For plan details, see [Plans for GitHub Copilot](https://docs.github.com/en/copilot/get-started/plans-for-github-copilot).
 
 Copilot Usage Insights adds a compact status bar indicator, a readable hover summary, and a full dashboard so you can answer the questions that actually matter while you work:
 
@@ -33,6 +36,8 @@ It is designed to stay quiet on startup, use your existing GitHub sign-in when a
 ## Install
 
 This extension is currently distributed through GitHub Releases as a `.vsix` package.
+
+We are working on making it available on the VS Code Marketplace as well.
 
 ### Option 1: Download from Releases
 
