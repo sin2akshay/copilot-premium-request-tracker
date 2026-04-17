@@ -45,7 +45,7 @@ export class StatusBar implements vscode.Disposable {
 
   showOffline(lastData: UsageData | null): void {
     if (lastData) {
-      this.showData(lastData, { refreshIntervalMinutes: 5, thresholdEnabled: false, thresholdWarning: 75, thresholdCritical: 90, statusBarTextMode: 'percent', statusBarGraphicMode: 'none', statusBarTextPosition: 'left', segmentedBarWidth: 8, showBillingDetails: false, showBillingRequestBreakdown: true, showCostInStatusBar: false }, null, true);
+      this.showData(lastData, { refreshIntervalMinutes: 5, thresholdEnabled: false, thresholdWarning: 80, thresholdCritical: 90, statusBarTextMode: 'percent', statusBarGraphicMode: 'none', statusBarTextPosition: 'left', segmentedBarWidth: 8, showBillingDetails: false, showBillingRequestBreakdown: true, showCostInStatusBar: false }, null, true);
     } else {
       this.item.text = '$(alert)';
       this.item.tooltip = 'Copilot Usage: Offline';
@@ -130,7 +130,7 @@ export class StatusBar implements vscode.Disposable {
 
     if (!data.unlimited && !data.noData) {
       const pct = computeDisplayPct(data);
-      const remaining = Math.max(0, data.quota - data.used);
+      const remaining = data.remaining;
       const now = new Date();
       const daysLeft = Math.max(0, Math.ceil((data.resetDate.getTime() - now.getTime()) / 86_400_000));
       const resetStr = data.resetDate.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
@@ -141,7 +141,7 @@ export class StatusBar implements vscode.Disposable {
       const barPct = Math.min(100, pct);
       const filled = barPct > 0 ? Math.max(1, Math.round((barPct / 100) * barWidth)) : 0;
       const empty = Math.max(0, barWidth - filled);
-      const barColor = pct >= 90 ? '#f85149' : pct >= 75 ? '#d29922' : '#3794ff';
+      const barColor = pct >= config.thresholdCritical ? '#f85149' : pct >= config.thresholdWarning ? '#d29922' : '#3794ff';
       md.appendMarkdown(
         `<span style="color:${barColor};">${'▰'.repeat(filled)}</span>`
         + `<span style="color:#585858;">${'▱'.repeat(empty)}</span>`
@@ -203,7 +203,7 @@ export function computeDisplayPct(data: UsageData): number {
 
 export function renderStatusBarText(data: UsageData, pct: number, config: ExtensionConfig, billing: BillingData | null = null): string {
   const w = config.segmentedBarWidth;
-  const remaining = Math.max(0, data.quota - data.used);
+  const remaining = data.remaining;
 
   // Text part
   let textPart = '';

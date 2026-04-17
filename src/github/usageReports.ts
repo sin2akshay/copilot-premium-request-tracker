@@ -83,6 +83,7 @@ export async function fetchUsage(token: string): Promise<UsageData> {
     const unlimited = !!pi?.unlimited;
     return {
       used: 0,
+      remaining: 0,
       quota: (pi?.entitlement as number) ?? 0,
       usedPct: 0,
       unlimited,
@@ -105,13 +106,21 @@ export async function fetchUsage(token: string): Promise<UsageData> {
 
   const entitlement = (pi.entitlement as number) ?? 0;
   const percentRemaining = Number(pi.percent_remaining);
-  if (!Number.isFinite(percentRemaining)) {
-    throw new ApiError('API_ERROR', 'Invalid percent_remaining from GitHub API');
+  const hasPercentRemaining = Number.isFinite(percentRemaining);
+  const hasExactRemaining = premiumQuota !== null;
+
+  if (!hasPercentRemaining && !hasExactRemaining) {
+    throw new ApiError('API_ERROR', 'Invalid quota data from GitHub API');
   }
 
-  const usedPct = Math.max(0, Math.round((100 - percentRemaining) * 10) / 10);
-  const used = entitlement > 0
-    ? Math.max(0, Math.round((entitlement * (100 - percentRemaining)) / 100))
+  const remaining = hasExactRemaining
+    ? Math.max(0, premiumQuota.remaining)
+    : (entitlement > 0
+        ? Math.max(0, Math.round((entitlement * percentRemaining) / 100))
+        : 0);
+  const used = entitlement > 0 ? Math.max(0, entitlement - remaining) : 0;
+  const usedPct = entitlement > 0
+    ? Math.min(100, Math.max(0, Math.round(((used / entitlement) * 100) * 10) / 10))
     : 0;
 
   const resetDate = data.quota_reset_date
@@ -120,6 +129,7 @@ export async function fetchUsage(token: string): Promise<UsageData> {
 
   return {
     used,
+    remaining,
     quota: entitlement,
     usedPct,
     unlimited: !!pi.unlimited,
@@ -140,12 +150,21 @@ export async function fetchUsage(token: string): Promise<UsageData> {
 
 function parseQuotaSnapshot(id: string, raw: Record<string, unknown> | undefined): QuotaSnapshot | null {
   if (!raw) { return null; }
+  const percentRemaining = Number(raw.percent_remaining);
+  const entitlement = (raw.entitlement as number) ?? 0;
+  const rawRemaining = Number(raw.remaining);
+  const remaining = Number.isFinite(rawRemaining)
+    ? rawRemaining
+    : (Number.isFinite(percentRemaining) && entitlement > 0
+        ? Math.max(0, Math.round((entitlement * percentRemaining) / 100))
+        : 0);
+
   return {
     id,
     unlimited: !!raw.unlimited,
-    percentRemaining: Number(raw.percent_remaining) || 0,
-    remaining: (raw.remaining as number) ?? 0,
-    entitlement: (raw.entitlement as number) ?? 0,
+    percentRemaining: Number.isFinite(percentRemaining) ? percentRemaining : 0,
+    remaining,
+    entitlement,
     overageCount: (raw.overage_count as number) ?? 0,
     overagePermitted: !!raw.overage_permitted,
   };

@@ -32,6 +32,7 @@ describe('fetchUsage', () => {
         quota_snapshots: {
           premium_interactions: {
             percent_remaining: 50,
+            remaining: 150,
             entitlement: 300,
             unlimited: false,
             overage_permitted: true,
@@ -44,12 +45,36 @@ describe('fetchUsage', () => {
     const data = await fetchUsage('tok');
     expect(data.plan).toBe('Pro');
     expect(data.used).toBe(150);
+    expect(data.remaining).toBe(150);
     expect(data.quota).toBe(300);
     expect(data.usedPct).toBe(50);
     expect(data.unlimited).toBe(false);
     expect(data.noData).toBe(false);
     expect(data.overageEnabled).toBe(true);
     expect(data.overageUsed).toBe(0);
+  });
+
+  it('prefers exact remaining counts over percent-derived rounding', async () => {
+    fakeFetch.mockResolvedValue(
+      jsonResponse({
+        copilot_plan: 'individual',
+        quota_snapshots: {
+          premium_interactions: {
+            percent_remaining: 25.2,
+            remaining: 75,
+            entitlement: 300,
+            unlimited: false,
+            overage_permitted: true,
+            overage_count: 0,
+          },
+        },
+      }),
+    );
+
+    const data = await fetchUsage('tok');
+    expect(data.remaining).toBe(75);
+    expect(data.used).toBe(225);
+    expect(data.usedPct).toBe(75);
   });
 
   it('handles unlimited plans', async () => {

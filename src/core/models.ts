@@ -40,6 +40,7 @@ export interface QuotaSnapshot {
 /** Usage data parsed from the copilot_internal/user endpoint. */
 export interface UsageData {
   used: number;
+  remaining: number;
   quota: number;
   usedPct: number;
   unlimited: boolean;

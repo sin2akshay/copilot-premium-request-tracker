@@ -85,7 +85,7 @@
         },
         "copilotUsageInsights.threshold.warning": {
           "type": "number",
-          "default": 75,
+          "default": 80,
           "minimum": 0,
           "maximum": 100,
           "markdownDescription": "Usage percentage at which the status bar turns warning color."

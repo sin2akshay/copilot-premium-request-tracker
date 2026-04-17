@@ -31,6 +31,7 @@ import { computeDisplayPct, renderStatusBarText } from '../ui/statusBar';
 
 const baseData: UsageData = {
   used: 150,
+  remaining: 150,
   quota: 300,
   usedPct: 50,
   unlimited: false,
@@ -51,7 +52,7 @@ const baseData: UsageData = {
 const baseConfig: ExtensionConfig = {
   refreshIntervalMinutes: 5,
   thresholdEnabled: true,
-  thresholdWarning: 75,
+  thresholdWarning: 80,
   thresholdCritical: 90,
   statusBarTextMode: 'percent',
   statusBarGraphicMode: 'none',
@@ -120,6 +121,7 @@ describe('computeDisplayPct', () => {
   it('returns usedPct when no overage', () => {
     const data: UsageData = {
       used: 150,
+      remaining: 150,
       quota: 300,
       usedPct: 50,
       unlimited: false,
@@ -142,6 +144,7 @@ describe('computeDisplayPct', () => {
   it('returns >100% when overage is present', () => {
     const data: UsageData = {
       used: 300,
+      remaining: 0,
       quota: 300,
       usedPct: 100,
       unlimited: false,
@@ -164,6 +167,7 @@ describe('computeDisplayPct', () => {
   it('returns usedPct when overage enabled but 0 usage', () => {
     const data: UsageData = {
       used: 200,
+      remaining: 100,
       quota: 300,
       usedPct: 67,
       unlimited: false,

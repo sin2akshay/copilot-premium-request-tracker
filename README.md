@@ -164,7 +164,7 @@ When billing details are enabled and available, `showCostInStatusBar` appends th
 |---|---|---|
 | `refreshIntervalMinutes` | `5` | How often to refresh usage data (1-60 min) |
 | `threshold.enabled` | `true` | Enable color-coded threshold warnings |
-| `threshold.warning` | `75` | Warning color threshold (%) |
+| `threshold.warning` | `80` | Warning color threshold (%) |
 | `threshold.critical` | `90` | Critical/error color threshold (%) |
 | `statusBarTextMode` | `percent` | Text portion of the status bar: `none`, `count`, `percent`, `countPercent`, `remaining`, `billedOnly` |
 | `statusBarGraphicMode` | `none` | Graphic portion of the status bar: `none`, `segmented`, `blocks`, `thinBlocks`, `dots`, `circles`, `braille`, `rectangles` |

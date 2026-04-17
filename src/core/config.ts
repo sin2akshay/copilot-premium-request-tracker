@@ -6,9 +6,9 @@ const SECTION = 'copilotUsageInsights';
 
 export function getConfig(): ExtensionConfig {
   const cfg = vscode.workspace.getConfiguration(SECTION);
-  const rawWarning = cfg.get<number>('threshold.warning', 75);
+  const rawWarning = cfg.get<number>('threshold.warning', 80);
   const rawCritical = cfg.get<number>('threshold.critical', 90);
-  const warning = Number.isFinite(Number(rawWarning)) ? Number(rawWarning) : 75;
+  const warning = Number.isFinite(Number(rawWarning)) ? Number(rawWarning) : 80;
   const critical = Number.isFinite(Number(rawCritical)) ? Number(rawCritical) : 90;
 
   const validTextModes = ['none', 'count', 'percent', 'countPercent', 'remaining', 'billedOnly'];

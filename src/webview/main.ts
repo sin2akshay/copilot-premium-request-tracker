@@ -16,6 +16,7 @@ interface QuotaSnapshotSerialized {
 
 interface UsageDataSerialized {
   used: number;
+  remaining: number;
   quota: number;
   usedPct: number;
   unlimited: boolean;
@@ -142,7 +143,7 @@ function render(model: DetailViewModelSerialized): void {
     : '—';
 
   // Pacing calculation
-  const remaining = data.noData || data.unlimited ? null : Math.max(0, data.quota - data.used);
+  const remaining = data.noData || data.unlimited ? null : data.remaining;
   const pacingPerDay = (remaining !== null && daysLeft !== null && daysLeft > 0)
     ? Math.floor(remaining / daysLeft)
     : null;
@@ -162,7 +163,7 @@ function render(model: DetailViewModelSerialized): void {
     gaugeSubLabel = 'Unlimited';
   } else {
     gaugePercent = data.usedPct;
-    gaugeLabel = `${data.usedPct}%`;
+    gaugeLabel = `${formatPercent(data.usedPct)}%`;
     gaugeSubLabel = `${data.used} of ${data.quota} used`;
     if (config.thresholdEnabled) {
       if (data.usedPct >= config.thresholdCritical) { gaugeColorClass = 'crit'; }
@@ -224,7 +225,7 @@ function render(model: DetailViewModelSerialized): void {
             <span class="stat-label">Days Until Reset</span>
           </div>
           <div class="stat-item">
-            <span class="stat-value mono">${data.noData ? '—' : data.unlimited ? '∞' : String(data.quota - data.used)}</span>
+            <span class="stat-value mono">${data.noData ? '—' : data.unlimited ? '∞' : String(data.remaining)}</span>
             <span class="stat-label">Remaining</span>
           </div>
           <div class="stat-item${pacingPerDay !== null && pacingPerDay <= 5 ? ' warn-bg' : ''}">
@@ -429,7 +430,9 @@ function renderQuotaCard(title: string, quota: QuotaSnapshotSerialized | null, i
   }
 
   const used = quota.entitlement - quota.remaining;
-  const pctUsed = quota.entitlement > 0 ? Math.round((used / quota.entitlement) * 100) : 0;
+  const pctUsed = quota.entitlement > 0
+    ? Math.min(100, Math.max(0, Math.round(((used / quota.entitlement) * 100) * 10) / 10))
+    : 0;
   return `
     <div class="quota-card">
       <div class="quota-header">
@@ -438,7 +441,7 @@ function renderQuotaCard(title: string, quota: QuotaSnapshotSerialized | null, i
       </div>
       <span class="quota-value mono">${used} <span class="muted">/ ${quota.entitlement}</span></span>
       ${renderQuotaBar(Math.min(pctUsed, 100) / 100, false)}
-      <span class="quota-sub muted">${quota.remaining} remaining · ${pctUsed}% used</span>
+      <span class="quota-sub muted">${quota.remaining} remaining · ${formatPercent(pctUsed)}% used</span>
     </div>
   `;
 }
@@ -608,6 +611,10 @@ function renderRequestBreakdownSection(billing: BillingDataSerialized | null, co
 
 function formatQuantity(qty: number): string {
   return qty % 1 === 0 ? String(qty) : qty.toFixed(1);
+}
+
+function formatPercent(value: number): string {
+  return value % 1 === 0 ? String(value) : value.toFixed(1);
 }
 
 function renderModelBar(quantity: number, maxQuantity: number): string {
