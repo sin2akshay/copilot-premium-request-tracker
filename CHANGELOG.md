@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.6.0
+
+- Unified premium request count calculations so the status bar, tooltip, and dashboard all show the same usage and remaining values.
+- Prefer exact `remaining` counts from GitHub quota snapshots when available, avoiding off-by-one mismatches caused by percentage rounding.
+- Improved percentage formatting consistency across the dashboard usage views.
+- Changed the default warning threshold from `75%` to `80%`.
+
 ## 1.5.0
 
 - Refreshed the README status bar preview asset so it matches the current hover content and codicon-based layout.
