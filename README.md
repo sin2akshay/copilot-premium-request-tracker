@@ -218,4 +218,16 @@ npm run package:vsix
 
 This creates a `.vsix` package in the repository root that you can install through **Extensions: Install from VSIX...**.
 
+//TODO
+Apparently only Individual users on a paid Copilot plan can view their own usage and entitlements. For Copilot Business or Copilot Enterprise plans, organization admins and billing managers can view usage reports for members.
+
+1. For Business and Enterprise plan users, disable the whole billing section by default
+<img width="788" height="114" alt="image" src="https://github.com/user-attachments/assets/6f446025-d307-4a3c-8295-fd6e710a732e" />
+Instead of these options, display a elegant short info message that - Billing and requests by model options disabled for Copilot Business or Copilot Enterprise plans. Only organization admins and billing managers can view usage reports for members. 
+
+Also, the View on Github link on the dashboard should take the users to the link https://github.com/settings/copilot/features as business/enterprise plan users can not have access to the link which we have now - https://github.com/settings/billing/premium_requests_usage
+
+This also means Business/Enterprise copilot users can directly use the github account logged into vscode and will never need to be asked to login to github separately.
+
+2. Turn the Show Requests by model toggle to off by default. I am assuming because of this, it is asking for login twice after install.
 
