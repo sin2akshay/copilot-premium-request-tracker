@@ -229,5 +229,9 @@ Also, the View on Github link on the dashboard should take the users to the link
 
 This also means Business/Enterprise copilot users can directly use the github account logged into vscode and will never need to be asked to login to github separately.
 
+Think about how we will show overage for these users or might have to disable this option:
+<img width="269" height="41" alt="image" src="https://github.com/user-attachments/assets/d6942114-4f29-4a84-9590-41a64d9d46ee" />
+
+
 2. Turn the Show Requests by model toggle to off by default. I am assuming because of this, it is asking for login twice after install.
 
